@@ -1,0 +1,18 @@
+{
+  "name": "EMO — Mood Randomizer",
+  "short_name": "EMO",
+  "description": "แอปพลิเคชันสุ่มและบันทึกอารมณ์แบบละเอียด ไม่ซ้ำง่าย ทำงานออฟไลน์ได้ 100%",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0b1020",
+  "theme_color": "#7c3aed",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait-primary"
+}

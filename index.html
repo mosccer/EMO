@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#7c3aed" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>EMO — Mood Randomizer</title>
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="apple-touch-icon" href="./icon.svg" />
+    <link rel="preconnect" href="about:blank" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="bg"></div>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">EMO</div>
+          <div class="brandText">
+            <div class="title" data-i18n="app.title">สุ่มอารมณ์</div>
+            <div class="subtitle" data-i18n="app.subtitle">ละเอียด • ครอบคลุม • ไม่ซ้ำง่าย</div>
+          </div>
+        </div>
+
+        <div class="topActions">
+          <button id="btnLang" class="btn ghost" type="button" title="ภาษา / Language">
+            <span class="ic" aria-hidden="true">🌐</span>
+            <span id="langLabel">ไทย</span>
+          </button>
+          <button id="btnCopy" class="btn ghost" type="button" title="คัดลอกผลลัพธ์">
+            <span class="ic" aria-hidden="true">⧉</span>
+            <span data-i18n="actions.copy">คัดลอก</span>
+          </button>
+          <button id="btnSave" class="btn ghost" type="button" title="บันทึกอารมณ์นี้">
+            <span class="ic" aria-hidden="true">☆</span>
+            <span data-i18n="actions.save">บันทึก</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="panel card">
+          <div class="panelHeader">
+            <div class="panelTitle" data-i18n="controls.title">การควบคุม</div>
+            <div id="stats" class="muted small"></div>
+          </div>
+
+          <div class="controls">
+            <div class="row">
+              <label class="field">
+                <span class="label" data-i18n="controls.mode">โหมดสุ่ม</span>
+                <select id="mode">
+                  <option value="normal" data-i18n="mode.normal">สุ่มแบบปกติ</option>
+                  <option value="noRepeatConsecutive" data-i18n="mode.noRepeatConsecutive">ไม่ให้ซ้ำอารมณ์เดิมติดกัน</option>
+                  <option value="diverse" data-i18n="mode.diverse">เน้นความหลากหลาย (แนะนำ)</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span class="label" data-i18n="controls.burstCount">สุ่มต่อเนื่อง (ครั้ง)</span>
+                <input id="burstCount" type="number" inputmode="numeric" min="1" max="30" value="5" />
+              </label>
+            </div>
+
+            <div class="row">
+              <label class="field grow">
+                <span class="label" data-i18n="controls.search">ค้นหาอารมณ์จากชื่อ</span>
+                <input id="search" type="search" data-i18n-placeholder="search.placeholder" placeholder="พิมพ์ชื่ออารมณ์ เช่น ดีใจ, กังวล, โดดเดี่ยว..." />
+              </label>
+            </div>
+
+            <div class="button-group">
+              <button id="btnRoll" class="btn primary" type="button">
+                <span class="ic" aria-hidden="true">🎲</span>
+                <span data-i18n="actions.roll">สุ่มอารมณ์</span>
+              </button>
+              <button id="btnWheel" class="btn" type="button" title="สุ่มด้วยวงล้อ">
+                <span class="ic" aria-hidden="true">🎡</span>
+                <span data-i18n="actions.wheel">วงล้อ</span>
+              </button>
+              <button id="btnBurst" class="btn" type="button" title="สุ่มหลายครั้งต่อเนื่อง">
+                <span class="ic" aria-hidden="true">⟲</span>
+                <span data-i18n="actions.burst">สุ่มต่อเนื่อง</span>
+              </button>
+              <button id="btnReset" class="btn ghost" type="button" title="ล้างประวัติ/การลงโทษการซ้ำ">
+                <span class="ic" aria-hidden="true">↺</span>
+                <span data-i18n="actions.reset">รีเซ็ต</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="listHeader">
+            <div class="panelTitle" data-i18n="search.resultsTitle">ผลการค้นหา</div>
+            <div class="muted small" data-i18n="hint.tapToShow">แตะเพื่อแสดง</div>
+          </div>
+          <div id="searchResults" class="chips" aria-live="polite"></div>
+        </section>
+
+        <section class="viewer card" id="viewer">
+          <div class="moodHeader">
+            <div class="moodBadge" id="moodBadge" aria-hidden="true">
+              <span id="moodEmoji">🙂</span>
+            </div>
+            <div class="moodMeta">
+              <div class="moodNameRow">
+                <h1 id="moodName" class="moodName">พร้อมสุ่ม</h1>
+                <span id="moodCategory" class="pill">—</span>
+              </div>
+              <p id="moodDesc" class="moodDesc" data-i18n="viewer.readyDesc">กดปุ่ม “สุ่มอารมณ์” เพื่อเริ่มต้น</p>
+              <div id="moodTagline" class="tagline"></div>
+            </div>
+          </div>
+
+          <div class="meters">
+            <div class="meter">
+              <div class="meterTop">
+                <div class="meterLabel">พลังงาน</div>
+                <div class="meterValue" id="valEnergy">—</div>
+              </div>
+              <div class="bar">
+                <div class="fill" id="barEnergy"></div>
+              </div>
+              <div class="meterHint muted small">0 = แทบไม่มีแรง, 100 = พลังสูงมาก</div>
+            </div>
+
+            <div class="meter">
+              <div class="meterTop">
+                <div class="meterLabel">ความสุข/เศร้า (Valence)</div>
+                <div class="meterValue" id="valValence">—</div>
+              </div>
+              <div class="bar dual">
+                <div class="fill left" id="barValenceLeft"></div>
+                <div class="fill right" id="barValenceRight"></div>
+                <div class="mid" aria-hidden="true"></div>
+              </div>
+              <div class="meterHint muted small">-100 = เศร้าหนัก, +100 = สุขมาก</div>
+            </div>
+
+            <div class="meter">
+              <div class="meterTop">
+                <div class="meterLabel">ความสงบ/ตื่นตัว (Arousal)</div>
+                <div class="meterValue" id="valArousal">—</div>
+              </div>
+              <div class="bar">
+                <div class="fill" id="barArousal"></div>
+              </div>
+              <div class="meterHint muted small">0 = สงบมาก, 100 = ตื่นตัวมาก</div>
+            </div>
+          </div>
+
+          <div class="swatches">
+            <div class="swatch">
+              <div class="swatchLabel muted small">สีประจำอารมณ์</div>
+              <div class="swatchRow">
+                <div id="colorDot" class="dot" aria-hidden="true"></div>
+                <code id="colorCode" class="code">—</code>
+              </div>
+            </div>
+            <div class="swatch">
+              <div class="swatchLabel muted small">สถานะ</div>
+              <div id="statusText" class="status">ยังไม่สุ่ม</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel card">
+          <div class="panelHeader">
+            <div class="panelTitle" data-i18n="history.title">ประวัติล่าสุด</div>
+            <div class="muted small" data-i18n="hint.tapToBack">แตะเพื่อย้อนกลับ</div>
+          </div>
+          <div id="history" class="history"></div>
+
+          <div class="divider"></div>
+
+          <div class="panelHeader">
+            <div class="panelTitle" data-i18n="favorites.title">ที่บันทึกไว้</div>
+            <div class="muted small" data-i18n="favorites.subtitle">เก็บในเครื่อง (local)</div>
+          </div>
+          <div id="favorites" class="favorites"></div>
+
+          <div class="divider"></div>
+
+          <div class="panelHeader">
+            <div class="panelTitle" data-i18n="stats.title">สถิติส่วนตัว</div>
+            <div class="muted small" data-i18n="stats.subtitle">7 วันล่าสุด</div>
+          </div>
+          <div class="statsGrid">
+            <div class="statCard">
+              <div class="muted small" data-i18n="stats.total">สุ่มทั้งหมด</div>
+              <div id="statTotal" class="statValue">—</div>
+            </div>
+            <div class="statCard">
+              <div class="muted small" data-i18n="stats.unique">อารมณ์ไม่ซ้ำ</div>
+              <div id="statUnique" class="statValue">—</div>
+            </div>
+            <div class="statCard">
+              <div class="muted small" data-i18n="stats.avgEnergy">เฉลี่ยพลังงาน</div>
+              <div id="statAvgEnergy" class="statValue">—</div>
+            </div>
+            <div class="statCard">
+              <div class="muted small" data-i18n="stats.avgValence">เฉลี่ย Valence</div>
+              <div id="statAvgValence" class="statValue">—</div>
+            </div>
+            <div class="statCard">
+              <div class="muted small" data-i18n="stats.avgArousal">เฉลี่ย Arousal</div>
+              <div id="statAvgArousal" class="statValue">—</div>
+            </div>
+          </div>
+          <div class="chartBlock">
+            <div class="chartTop">
+              <div class="panelTitle" data-i18n="stats.trendTitle">แนวโน้ม 7 วัน</div>
+              <div class="muted small" data-i18n="stats.trendHint">จำนวนครั้ง + ค่าเฉลี่ย</div>
+            </div>
+            <canvas id="statsCanvas" width="720" height="220" aria-label="กราฟแนวโน้ม 7 วัน"></canvas>
+          </div>
+          <div class="chartBlock">
+            <div class="chartTop">
+              <div class="panelTitle" data-i18n="stats.topTitle">อารมณ์ที่สุ่มบ่อยสุด</div>
+              <div class="muted small" data-i18n="stats.topHint">Top 6</div>
+            </div>
+            <div id="topMoods" class="topList"></div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="panelHeader">
+            <div class="panelTitle" data-i18n="diary.title">ไดอารี่</div>
+            <div class="muted small" data-i18n="diary.subtitle">บันทึกคู่กับอารมณ์</div>
+          </div>
+          <div class="diaryForm">
+            <label class="field">
+              <span class="label" data-i18n="diary.noteLabel">โน้ต/เหตุการณ์ (ผูกกับอารมณ์ที่กำลังแสดง)</span>
+              <textarea id="diaryNote" rows="3" placeholder="วันนี้เกิดอะไรขึ้น? รู้สึกอย่างไร?"></textarea>
+            </label>
+            <div class="row">
+              <label class="field grow">
+                <span class="label" data-i18n="diary.tagsLabel">แท็ก (คั่นด้วย , )</span>
+                <input id="diaryTags" type="text" data-i18n-placeholder="diary.tagsPlaceholder" placeholder="งาน, ครอบครัว, สุขภาพ..." />
+              </label>
+              <button id="btnDiarySave" class="btn" type="button" title="บันทึกไดอารี่">
+                <span class="ic" aria-hidden="true">📝</span>
+                <span data-i18n="actions.diarySave">บันทึก</span>
+              </button>
+            </div>
+          </div>
+          <div class="listHeader">
+            <div class="panelTitle" data-i18n="diary.listTitle">รายการไดอารี่ล่าสุด</div>
+            <div class="muted small" data-i18n="diary.listHint">แตะเพื่อดู/แก้ไข</div>
+          </div>
+          <div id="diaryList" class="diaryList"></div>
+        </section>
+      </main>
+
+      <footer class="footer muted small">
+        <span data-i18n="footer.offline">EMO ทำงานแบบออฟไลน์ 100% • ไม่ใช้ไลบรารีภายนอก</span>
+      </footer>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <div id="wheelModal" class="modal" aria-hidden="true">
+      <div class="modalBackdrop" data-close="1"></div>
+      <div class="modalCard card" role="dialog" aria-modal="true" aria-label="วงล้อสุ่มอารมณ์">
+        <div class="modalTop">
+          <div class="modalTitle" data-i18n="wheel.title">วงล้อสุ่มอารมณ์</div>
+          <button id="btnWheelClose" class="miniBtn" type="button" title="ปิด" data-i18n="actions.close">ปิด</button>
+        </div>
+        <div class="wheelWrap">
+          <canvas id="wheelCanvas" width="520" height="520" aria-label="วงล้อหมวดอารมณ์"></canvas>
+          <div class="wheelPointer" aria-hidden="true"></div>
+          <div id="wheelCurrentLabel" class="wheelCurrentLabel">อารมณ์</div>
+        </div>
+        <div class="modalActions">
+          <button id="btnWheelSpin" class="btn primary" type="button">
+            <span class="ic" aria-hidden="true">🌀</span>
+            <span data-i18n="actions.spin">หมุนวงล้อ</span>
+          </button>
+          <div class="muted small" data-i18n="wheel.hint">วงล้อจะเลือก “หมวด” แล้วสุ่มอารมณ์ในหมวดนั้นให้อีกที</div>
+        </div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
