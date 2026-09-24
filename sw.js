@@ -1,57 +1,50 @@
-const CACHE_NAME = 'emo-cache-v1';
+const CACHE_NAME = 'emo-cache-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
+  './data.js',
   './script.js',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-maskable-512.png',
+  './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log('[Service Worker] Caching app shell');
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
   );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(keyList.map((key) => {
-        if (key !== CACHE_NAME) {
-          console.log('[Service Worker] Removing old cache', key);
-          return caches.delete(key);
-        }
-      }));
-    })
+    caches.keys().then((keyList) =>
+      Promise.all(keyList.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))
+    )
   );
   self.clients.claim();
 });
 
+// Stale-while-revalidate for same-origin GETs: answer from cache instantly (works offline),
+// refresh the cache in the background so a new deploy shows up on the next visit.
 self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET' || !req.url.startsWith(self.location.origin)) return;
+
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Return cached response if found
-      if (response) {
-        return response;
-      }
-      // Otherwise fetch from network and cache it dynamically
-      return fetch(event.request).then((fetchRes) => {
-        // Exclude non-http requests (e.g. chrome-extension://)
-        if (!event.request.url.startsWith('http')) return fetchRes;
-        
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request.url, fetchRes.clone());
-          return fetchRes;
-        });
-      });
-    }).catch(() => {
-      // Fallback if fully offline and not in cache
-      console.log('[Service Worker] Fetch failed and no cache fallback available.');
+    caches.open(CACHE_NAME).then(async (cache) => {
+      const cached = await cache.match(req, { ignoreSearch: req.mode === 'navigate' });
+      const network = fetch(req)
+        .then((res) => {
+          if (res && res.ok) cache.put(req, res.clone());
+          return res;
+        })
+        .catch(() => cached);
+      return cached || network;
     })
   );
 });

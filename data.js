@@ -1,0 +1,621 @@
+/* EMO — mood library data (loaded before script.js) */
+
+const CATEGORY_ORDER = [
+  "ความสุข",
+  "ความรัก",
+  "ความเศร้า",
+  "ความโกรธ",
+  "ความกลัว",
+  "ความกังวล",
+  "ความสงบ",
+  "ความตื่นเต้น",
+  "ความประหลาดใจ",
+  "ความอยากรู้",
+  "ความอาย",
+  "ความผิดหวัง",
+  "ความคิดถึง",
+  "ความสับสน",
+  "ความภาคภูมิใจ",
+  "ความอิจฉา",
+  "ความรังเกียจ",
+  "ความขอบคุณ",
+  "ความเห็นใจ",
+  "ความโดดเดี่ยว",
+  "ความหวัง",
+  "ความทึ่ง",
+  "ความเบื่อ",
+  "ความเหนื่อยล้า",
+  "ความโล่งใจ",
+  "อารมณ์ผสมและซับซ้อน",
+];
+
+const MIX_CATEGORY = "อารมณ์ผสมและซับซ้อน";
+
+const CATEGORY_THEME = {
+  ความสุข: { color: "#34d399", emoji: "😄" },
+  ความรัก: { color: "#fb7185", emoji: "💗" },
+  ความเศร้า: { color: "#60a5fa", emoji: "😢" },
+  ความโกรธ: { color: "#f97316", emoji: "😠" },
+  ความกลัว: { color: "#a78bfa", emoji: "😨" },
+  ความกังวล: { color: "#fbbf24", emoji: "😟" },
+  ความสงบ: { color: "#22d3ee", emoji: "😌" },
+  ความตื่นเต้น: { color: "#f472b6", emoji: "🤩" },
+  ความประหลาดใจ: { color: "#e879f9", emoji: "😲" },
+  ความอยากรู้: { color: "#818cf8", emoji: "🧐" },
+  ความอาย: { color: "#fda4af", emoji: "😳" },
+  ความผิดหวัง: { color: "#94a3b8", emoji: "😞" },
+  ความคิดถึง: { color: "#38bdf8", emoji: "🥺" },
+  ความสับสน: { color: "#c084fc", emoji: "😵‍💫" },
+  ความภาคภูมิใจ: { color: "#a3e635", emoji: "🏆" },
+  ความอิจฉา: { color: "#10b981", emoji: "😒" },
+  ความรังเกียจ: { color: "#9aa83a", emoji: "🤢" },
+  ความขอบคุณ: { color: "#f59e0b", emoji: "🙏" },
+  ความเห็นใจ: { color: "#fdba74", emoji: "🤗" },
+  ความโดดเดี่ยว: { color: "#64748b", emoji: "🌙" },
+  ความหวัง: { color: "#5eead4", emoji: "✨" },
+  ความทึ่ง: { color: "#facc15", emoji: "🌌" },
+  ความเบื่อ: { color: "#a1a1aa", emoji: "🥱" },
+  ความเหนื่อยล้า: { color: "#a8a29e", emoji: "😪" },
+  ความโล่งใจ: { color: "#2dd4bf", emoji: "😮‍💨" },
+  "อารมณ์ผสมและซับซ้อน": { color: "#7c3aed", emoji: "🧩" },
+};
+
+const CATEGORY_LABELS = {
+  en: {
+    ความสุข: "Happiness",
+    ความรัก: "Love",
+    ความเศร้า: "Sadness",
+    ความโกรธ: "Anger",
+    ความกลัว: "Fear",
+    ความกังวล: "Anxiety",
+    ความสงบ: "Calm",
+    ความตื่นเต้น: "Excitement",
+    ความประหลาดใจ: "Surprise",
+    ความอยากรู้: "Curiosity",
+    ความอาย: "Shame / Embarrassment",
+    ความผิดหวัง: "Disappointment",
+    ความคิดถึง: "Longing / Missing",
+    ความสับสน: "Confusion",
+    ความภาคภูมิใจ: "Pride",
+    ความอิจฉา: "Envy",
+    ความรังเกียจ: "Disgust",
+    ความขอบคุณ: "Gratitude",
+    ความเห็นใจ: "Compassion",
+    ความโดดเดี่ยว: "Loneliness",
+    ความหวัง: "Hope",
+    ความทึ่ง: "Awe",
+    ความเบื่อ: "Boredom",
+    ความเหนื่อยล้า: "Fatigue",
+    ความโล่งใจ: "Relief",
+    "อารมณ์ผสมและซับซ้อน": "Mixed / Complex",
+  },
+};
+
+// Short labels for the wheel
+const SHORT_CATS = {
+  ความสุข: "สุข", ความรัก: "รัก", ความเศร้า: "เศร้า", ความโกรธ: "โกรธ",
+  ความกลัว: "กลัว", ความกังวล: "กังวล", ความสงบ: "สงบ", ความตื่นเต้น: "ตื่นเต้น",
+  ความประหลาดใจ: "ประหลาดใจ", ความอยากรู้: "อยากรู้",
+  ความอาย: "อาย", ความผิดหวัง: "ผิดหวัง", ความคิดถึง: "คิดถึง", ความสับสน: "สับสน",
+  ความภาคภูมิใจ: "ภูมิใจ", ความอิจฉา: "อิจฉา", ความรังเกียจ: "รังเกียจ", ความขอบคุณ: "ขอบคุณ",
+  ความเห็นใจ: "เห็นใจ", ความโดดเดี่ยว: "โดดเดี่ยว", ความหวัง: "หวัง", ความทึ่ง: "ทึ่ง",
+  ความเบื่อ: "เบื่อ", ความเหนื่อยล้า: "เหนื่อย", ความโล่งใจ: "โล่งใจ",
+  "อารมณ์ผสมและซับซ้อน": "ซับซ้อน",
+};
+
+const TAGLINES_BY_CATEGORY = {
+  ความสุข: [
+    "ปล่อยให้รอยยิ้มทำงานของมัน",
+    "ความสว่างเล็ก ๆ ก็พอเปลี่ยนวันได้",
+    "วันนี้ใจเบาขึ้นนิดหนึ่ง",
+  ],
+  ความรัก: [
+    "อ่อนโยนกับตัวเองพอ ๆ กับคนที่รัก",
+    "ความใกล้ชิดเริ่มจากความจริงใจ",
+    "หัวใจมีพื้นที่เสมอ ถ้าเราเปิดไว้",
+  ],
+  ความเศร้า: [
+    "ความเศร้าไม่ได้ผิด—แค่ขอเวลาหน่อย",
+    "หายใจลึก ๆ แล้วค่อย ๆ ไป",
+    "วันนี้ไม่ไหวก็ไม่เป็นไร",
+  ],
+  ความโกรธ: [
+    "พลังนี้มีค่าถ้าเราใช้มันอย่างฉลาด",
+    "ตั้งขอบเขตแล้วใจจะปลอดภัยขึ้น",
+    "หยุดสักนิดก่อนตอบโต้",
+  ],
+  ความกลัว: [
+    "กลัวไม่เท่ากับแพ้",
+    "ก้าวเล็ก ๆ ก็เป็นความกล้าหาญ",
+    "อยู่กับมันอย่างอ่อนโยน",
+  ],
+  ความกังวล: [
+    "คิดได้ แต่อย่าให้คิดพาไปไกลเกิน",
+    "แยกสิ่งที่ควบคุมได้ออกจากที่ควบคุมไม่ได้",
+    "กลับมาที่ลมหายใจ",
+  ],
+  ความสงบ: [
+    "นิ่ง ๆ แต่ไม่หยุดเติบโต",
+    "ความเงียบคือพื้นที่ของใจ",
+    "สบาย ๆ ก็พอ",
+  ],
+  ความตื่นเต้น: [
+    "พลังงานพร้อม—ใช้มันให้คุ้ม",
+    "ลองสิ่งใหม่ ๆ แบบปลอดภัย",
+    "วันนี้มีประกาย",
+  ],
+  ความประหลาดใจ: [
+    "โลกยังมีเรื่องให้เซอร์ไพรส์เสมอ",
+    "เปิดใจรับสิ่งที่ไม่คาดคิด",
+    "บางครั้งสิ่งดี ๆ ก็มาแบบไม่บอกล่วงหน้า",
+  ],
+  ความอยากรู้: [
+    "คำถามดี ๆ คือจุดเริ่มต้นของการเติบโต",
+    "ความสงสัยคือเข็มทิศ",
+    "ลองขุดลึกอีกนิด",
+  ],
+  ความอาย: [
+    "เราเป็นมนุษย์ธรรมดาได้",
+    "ความอายคือสัญญาณว่าเราสนใจ",
+    "ค่อย ๆ เปิดพื้นที่ให้ตัวเอง",
+  ],
+  ความผิดหวัง: [
+    "ผิดหวังได้ แปลว่าเราเคยหวัง",
+    "เรียนรู้แล้วค่อยเริ่มใหม่",
+    "ให้ใจพักก่อนตัดสิน",
+  ],
+  ความคิดถึง: [
+    "ความคิดถึงคือความรักในรูปแบบหนึ่ง",
+    "เก็บความทรงจำไว้แบบไม่ทำร้ายตัวเอง",
+    "คิดถึงได้ แต่ยังอยู่กับปัจจุบัน",
+  ],
+  ความสับสน: [
+    "สับสนได้ แปลว่าเรากำลังจัดระบบใหม่",
+    "ถามคำถามดี ๆ แล้วคำตอบจะมา",
+    "พักก่อน แล้วค่อยเลือก",
+  ],
+  ความภาคภูมิใจ: [
+    "ยกย่องความพยายามของตัวเอง",
+    "เก่งมากที่ยังไปต่อ",
+    "ภูมิใจอย่างพอดีและจริงใจ",
+  ],
+  ความอิจฉา: [
+    "อิจฉาเป็นข้อมูล ไม่ใช่ความผิด",
+    "เปลี่ยนมันเป็นแรงบันดาลใจ",
+    "กลับมามองเส้นทางของเรา",
+  ],
+  ความรังเกียจ: [
+    "ความรู้สึกนี้กำลังปกป้องเรา",
+    "ถอยออกมาได้ ไม่ผิด",
+    "ขอบเขตที่ชัดคือการดูแลตัวเอง",
+  ],
+  ความขอบคุณ: [
+    "ขอบคุณเล็ก ๆ ทำให้ใจใหญ่ขึ้น",
+    "มองเห็นสิ่งดี ๆ ที่มีอยู่แล้ว",
+    "ซาบซึ้งกับปัจจุบัน",
+  ],
+  ความเห็นใจ: [
+    "ความเข้าใจคือของขวัญ",
+    "ใจดีกับคนอื่น และกับตัวเองด้วย",
+    "การรับฟังก็เป็นการช่วยเหลือ",
+  ],
+  ความโดดเดี่ยว: [
+    "โดดเดี่ยวไม่ได้แปลว่าไร้ค่า",
+    "เชื่อมต่อทีละนิด",
+    "อยู่กับตัวเองแบบเป็นมิตร",
+  ],
+  ความหวัง: [
+    "มีทางเสมอ แม้ยังไม่เห็นทั้งหมด",
+    "ความหวังคือเชื้อไฟของวันพรุ่งนี้",
+    "เริ่มจากก้าวที่ทำได้",
+  ],
+  ความทึ่ง: [
+    "โลกกว้างกว่าที่คิด",
+    "ดื่มด่ำกับความมหัศจรรย์เล็ก ๆ",
+    "ความทึ่งทำให้ใจกว้างขึ้น",
+  ],
+  ความเบื่อ: [
+    "เบื่อคือสัญญาณว่าเราต้องการความหมาย",
+    "ลองเปลี่ยนจังหวะเล็ก ๆ",
+    "พักให้พอแล้วค่อยไปต่อ",
+  ],
+  ความเหนื่อยล้า: [
+    "พักไม่ใช่แพ้",
+    "ร่างกายกำลังขอเวลา",
+    "ชาร์จแบตก่อนแล้วค่อยไปต่อ",
+  ],
+  ความโล่งใจ: [
+    "ปล่อยวางแล้วพื้นที่จะกลับมา",
+    "เบาลงแล้วดีขึ้นจริง ๆ",
+    "วันนี้ผ่านไปได้แล้ว",
+  ],
+  "อารมณ์ผสมและซับซ้อน": [
+    "ใจมีได้หลายอย่างพร้อมกัน",
+    "ไม่ต้องเลือกข้าง—แค่รับรู้",
+    "ซับซ้อนคือความเป็นมนุษย์",
+  ],
+};
+
+// Small, doable ideas per category: [th, en]
+const SUGGESTIONS = {
+  ความสุข: [
+    ["แชร์เรื่องดี ๆ วันนี้ให้ใครสักคนฟัง", "Share today's good news with someone"],
+    ["จดสิ่งที่ทำให้ยิ้มไว้ 3 อย่าง", "Write down 3 things that made you smile"],
+    ["เปิดเพลงโปรดแล้วเต้นสักเพลง", "Put on a favorite song and dance to it"],
+  ],
+  ความรัก: [
+    ["ส่งข้อความสั้น ๆ บอกคนสำคัญว่าคิดถึง", "Send a short 'thinking of you' message"],
+    ["ทำอะไรดี ๆ ให้ตัวเองสักอย่าง", "Do one kind thing for yourself"],
+    ["โทรหาคนที่อยากคุยด้วย", "Call someone you'd like to talk to"],
+  ],
+  ความเศร้า: [
+    ["อนุญาตให้ตัวเองเศร้าได้สัก 10 นาที", "Allow yourself 10 minutes to feel sad"],
+    ["ดื่มน้ำอุ่น ๆ แล้วห่มผ้านุ่ม ๆ", "Have a warm drink and get cozy"],
+    ["เขียนความรู้สึกลงไดอารี่", "Write your feelings in the diary"],
+  ],
+  ความโกรธ: [
+    ["ออกไปเดินเร็ว ๆ สัก 5 นาที", "Take a brisk 5-minute walk"],
+    ["นับ 1–10 ช้า ๆ ก่อนตอบโต้", "Count slowly to 10 before responding"],
+    ["เขียนสิ่งที่โกรธลงกระดาษแล้วฉีกทิ้ง", "Write out what angers you, then tear it up"],
+  ],
+  ความกลัว: [
+    ["เรียกชื่อสิ่งที่กลัวออกมาให้ชัด", "Name exactly what you're afraid of"],
+    ["มองหาสิ่งรอบตัวที่มองเห็นได้ 5 อย่าง", "Notice 5 things you can see around you"],
+    ["คุยกับคนที่ไว้ใจ", "Talk with someone you trust"],
+  ],
+  ความกังวล: [
+    ["ลองฝึกหายใจแบบกล่อง 1 นาที", "Try one minute of box breathing"],
+    ["แยกเรื่องที่ควบคุมได้/ไม่ได้", "Split what you can and can't control"],
+    ["ทำสิ่งเล็กที่สุดที่ทำได้ตอนนี้", "Do the smallest next step you can"],
+  ],
+  ความสงบ: [
+    ["นั่งเงียบ ๆ ฟังเสียงรอบตัว 1 นาที", "Sit quietly and listen for a minute"],
+    ["ชงชาแล้วดื่มช้า ๆ", "Brew some tea and sip it slowly"],
+    ["ใช้ความนิ่งนี้วางแผนเรื่องสำคัญ", "Use this calm to plan something important"],
+  ],
+  ความตื่นเต้น: [
+    ["เปลี่ยนพลังนี้เป็นงานสร้างสรรค์", "Channel this energy into something creative"],
+    ["จดไอเดียไว้ก่อนมันหายไป", "Jot down ideas before they fade"],
+    ["ออกกำลังกายสั้น ๆ ระบายพลัง", "Burn off energy with a quick workout"],
+  ],
+  ความประหลาดใจ: [
+    ["หยุดสักครู่แล้วถามว่ามันบอกอะไรเรา", "Pause and ask what this surprise tells you"],
+    ["เล่าเรื่องนี้ให้เพื่อนฟัง", "Tell a friend about it"],
+    ["จดไว้เป็นความทรงจำ", "Save it as a memory"],
+  ],
+  ความอยากรู้: [
+    ["ค้นหาเรื่องที่สงสัยต่ออีก 15 นาที", "Dig into your question for 15 more minutes"],
+    ["ลองเรียนสิ่งใหม่สั้น ๆ วันนี้", "Learn one small new thing today"],
+    ["ตั้งคำถามดี ๆ สักข้อ", "Write down one good question"],
+  ],
+  ความอาย: [
+    ["คนส่วนใหญ่ไม่ได้จำเท่าที่เราคิดหรอก", "People notice far less than you think"],
+    ["หัวเราะให้ตัวเองเบา ๆ", "Give yourself a gentle laugh"],
+    ["พูดกับตัวเองเหมือนพูดกับเพื่อน", "Talk to yourself like you would to a friend"],
+  ],
+  ความผิดหวัง: [
+    ["ยอมรับว่าเสียใจได้ แล้วค่อยคิดแผนใหม่", "Accept the letdown, then make a new plan"],
+    ["หาบทเรียนเล็ก ๆ 1 ข้อ", "Find one small lesson"],
+    ["ให้รางวัลตัวเองที่พยายามแล้ว", "Reward yourself for trying"],
+  ],
+  ความคิดถึง: [
+    ["เปิดรูปเก่า ๆ ที่ทำให้ยิ้ม", "Look at old photos that make you smile"],
+    ["ส่งข้อความหาคนที่คิดถึง", "Message the person you miss"],
+    ["เขียนจดหมายที่ไม่ต้องส่ง", "Write a letter you don't have to send"],
+  ],
+  ความสับสน: [
+    ["เขียนทุกอย่างที่คิดออกมาก่อน", "Brain-dump everything onto paper"],
+    ["แตกปัญหาเป็นข้อย่อย", "Break the problem into smaller parts"],
+    ["พักสมองแล้วค่อยกลับมาดูใหม่", "Take a break and come back fresh"],
+  ],
+  ความภาคภูมิใจ: [
+    ["ฉลองเล็ก ๆ ให้ตัวเอง", "Celebrate a little"],
+    ["จดความสำเร็จนี้ไว้อ่านวันที่ท้อ", "Write it down for a tougher day"],
+    ["ขอบคุณคนที่ช่วยให้มาถึงตรงนี้", "Thank someone who helped you get here"],
+  ],
+  ความอิจฉา: [
+    ["ถามตัวเองว่าจริง ๆ แล้วอยากได้อะไร", "Ask yourself what you truly want"],
+    ["เปลี่ยนการเปรียบเทียบเป็นเป้าหมาย", "Turn comparison into a goal"],
+    ["พักจากโซเชียลสักพัก", "Take a short social media break"],
+  ],
+  ความรังเกียจ: [
+    ["ถอยออกมาจากสิ่งนั้นก่อน", "Step away from it first"],
+    ["ตั้งขอบเขตให้ชัด", "Set a clear boundary"],
+    ["ล้างหน้า สูดอากาศสดชื่น", "Wash your face and get some fresh air"],
+  ],
+  ความขอบคุณ: [
+    ["บอกขอบคุณใครสักคนวันนี้", "Say thank you to someone today"],
+    ["จดสิ่งที่ขอบคุณ 3 อย่าง", "List 3 things you're grateful for"],
+    ["ส่งต่อความใจดีให้คนอื่น", "Pass the kindness on"],
+  ],
+  ความเห็นใจ: [
+    ["ถามไถ่คนที่กำลังลำบาก", "Check in on someone who's struggling"],
+    ["ฟังโดยไม่ต้องรีบแก้ปัญหา", "Listen without rushing to fix"],
+    ["อย่าลืมเห็นใจตัวเองด้วย", "Remember to be kind to yourself too"],
+  ],
+  ความโดดเดี่ยว: [
+    ["ทักเพื่อนเก่าสักคน", "Say hi to an old friend"],
+    ["ไปนั่งในที่ที่มีผู้คน เช่น คาเฟ่", "Spend time somewhere with people, like a café"],
+    ["ทำกิจกรรมที่ชอบกับตัวเองอย่างใส่ใจ", "Enjoy a favorite activity mindfully"],
+  ],
+  ความหวัง: [
+    ["เขียนเป้าหมายเล็ก ๆ สำหรับพรุ่งนี้", "Write a small goal for tomorrow"],
+    ["เริ่มก้าวแรกวันนี้เลย", "Take the first step today"],
+    ["แชร์ความหวังนี้กับคนที่เชื่อในตัวเรา", "Share this hope with someone who believes in you"],
+  ],
+  ความทึ่ง: [
+    ["ออกไปมองท้องฟ้าหรือธรรมชาติ", "Go look at the sky or nature"],
+    ["ถ่ายรูปสิ่งที่ทำให้ทึ่งเก็บไว้", "Take a photo of what amazed you"],
+    ["ปล่อยให้ตัวเองดื่มด่ำโดยไม่ต้องรีบ", "Let yourself soak it in"],
+  ],
+  ความเบื่อ: [
+    ["ลองทำสิ่งเดิมด้วยวิธีใหม่", "Do a familiar thing a new way"],
+    ["ตั้งภารกิจเล็ก ๆ 10 นาที", "Set a tiny 10-minute challenge"],
+    ["ลองหมุนวงล้อหาอารมณ์ใหม่!", "Spin the wheel for something new!"],
+  ],
+  ความเหนื่อยล้า: [
+    ["งีบสั้น ๆ 20 นาที", "Take a 20-minute power nap"],
+    ["ดื่มน้ำ ยืดเส้นยืดสาย", "Drink water and stretch"],
+    ["ตัดงานที่ไม่จำเป็นออกสักอย่าง", "Drop one non-essential task today"],
+  ],
+  ความโล่งใจ: [
+    ["หายใจยาว ๆ ฉลองที่ผ่านมาได้", "Take a long breath—you made it"],
+    ["พักให้เต็มที่ก่อนเริ่มเรื่องใหม่", "Rest fully before the next thing"],
+    ["ขอบคุณตัวเองที่อดทน", "Thank yourself for hanging in there"],
+  ],
+  "อารมณ์ผสมและซับซ้อน": [
+    ["ลองตั้งชื่อแต่ละความรู้สึกแยกกัน", "Name each feeling separately"],
+    ["เขียนไดอารี่แบบไม่ต้องสรุป", "Journal without needing a conclusion"],
+    ["ใจดีกับตัวเองในความซับซ้อนนี้", "Be gentle with yourself in the complexity"],
+  ],
+};
+
+// Each seed makes multiple variants via intensity/texture modifiers.
+// Keep existing names stable: saved history/favorites/diary refer to them by name.
+const SEEDS = [
+  { category: "ความสุข", name: "ดีใจ", desc: "รู้สึกเป็นสุขและเบิกบาน", energy: 70, valence: 80, arousal: 55, emoji: "😄" },
+  { category: "ความสุข", name: "ปลื้มใจ", desc: "อบอุ่นและพึงพอใจในสิ่งที่เกิดขึ้น", energy: 55, valence: 75, arousal: 35, emoji: "😊" },
+  { category: "ความสุข", name: "สนุก", desc: "มีความเพลิดเพลินและอยากทำต่อ", energy: 75, valence: 70, arousal: 65, emoji: "😆" },
+  { category: "ความสุข", name: "ขำ", desc: "หัวเราะกับเรื่องเล็ก ๆ อย่างเป็นธรรมชาติ", energy: 60, valence: 65, arousal: 55, emoji: "😂" },
+  { category: "ความสุข", name: "สดชื่น", desc: "กระปรี้กระเปร่าและสดใส", energy: 70, valence: 65, arousal: 55, emoji: "🌞" },
+  { category: "ความสุข", name: "ฟิน", desc: "สุขใจจนยิ้มไม่หุบ", energy: 65, valence: 85, arousal: 60, emoji: "🥳" },
+
+  { category: "ความรัก", name: "รัก", desc: "รู้สึกผูกพันและห่วงใย", energy: 55, valence: 75, arousal: 40, emoji: "💗" },
+  { category: "ความรัก", name: "เอ็นดู", desc: "อยากปกป้องและดูแลอย่างอ่อนโยน", energy: 45, valence: 70, arousal: 35, emoji: "🥰" },
+  { category: "ความรัก", name: "คิดถึงแบบอบอุ่น", desc: "นึกถึงใครบางคนด้วยความสบายใจ", energy: 40, valence: 55, arousal: 25, emoji: "🫶" },
+  { category: "ความรัก", name: "หลงใหล", desc: "ดึงดูดแรงและอยากอยู่ใกล้", energy: 75, valence: 70, arousal: 75, emoji: "😍" },
+  { category: "ความรัก", name: "คลั่งรัก", desc: "ใจเต้นแรงเพราะใครบางคน", energy: 80, valence: 75, arousal: 80, emoji: "💘" },
+
+  { category: "ความเศร้า", name: "เศร้า", desc: "รู้สึกหดหู่และใจหนัก", energy: 25, valence: -65, arousal: 25, emoji: "😢" },
+  { category: "ความเศร้า", name: "เสียใจ", desc: "รู้สึกเจ็บปวดจากการสูญเสีย/ผิดหวัง", energy: 30, valence: -75, arousal: 35, emoji: "😭" },
+  { category: "ความเศร้า", name: "เหงา", desc: "รู้สึกขาดการเชื่อมต่อกับคนอื่น", energy: 25, valence: -55, arousal: 30, emoji: "🥀" },
+  { category: "ความเศร้า", name: "ห่อเหี่ยว", desc: "พลังใจลดลง ไม่ค่อยอยากทำอะไร", energy: 15, valence: -45, arousal: 15, emoji: "😔" },
+  { category: "ความเศร้า", name: "ใจสลาย", desc: "เจ็บลึกจนเหมือนหัวใจแตก", energy: 25, valence: -85, arousal: 45, emoji: "💔" },
+
+  { category: "ความโกรธ", name: "โกรธ", desc: "ไม่พอใจและอยากตอบโต้", energy: 70, valence: -60, arousal: 75, emoji: "😠" },
+  { category: "ความโกรธ", name: "ฉุนเฉียว", desc: "หงุดหงิดง่าย อารมณ์ขึ้นเร็ว", energy: 60, valence: -45, arousal: 70, emoji: "😤" },
+  { category: "ความโกรธ", name: "ไม่พอใจ", desc: "ติดใจและรู้สึกว่ามีบางอย่างไม่ถูกต้อง", energy: 45, valence: -35, arousal: 45, emoji: "😑" },
+  { category: "ความโกรธ", name: "เดือด", desc: "ความโกรธแรงจนรู้สึกร้อนวูบวาบ", energy: 85, valence: -70, arousal: 85, emoji: "🔥" },
+  { category: "ความโกรธ", name: "ขุ่นเคือง", desc: "ไม่พอใจที่ถูกเอาเปรียบ", energy: 55, valence: -50, arousal: 60, emoji: "😾" },
+
+  { category: "ความกลัว", name: "กลัว", desc: "กังวลต่อภัยคุกคามหรือสิ่งไม่แน่นอน", energy: 55, valence: -60, arousal: 75, emoji: "😨" },
+  { category: "ความกลัว", name: "หวาดผวา", desc: "กลัวมากจนร่างกายตอบสนองชัดเจน", energy: 75, valence: -80, arousal: 90, emoji: "😱" },
+  { category: "ความกลัว", name: "ระแวง", desc: "ไม่มั่นใจและคอยจับสังเกต", energy: 45, valence: -50, arousal: 55, emoji: "👀" },
+  { category: "ความกลัว", name: "ตื่นตระหนก", desc: "กลัวจนควบคุมสติยาก", energy: 85, valence: -85, arousal: 95, emoji: "🫨" },
+  { category: "ความกลัว", name: "ขวัญเสีย", desc: "ใจเสียจนตั้งหลักไม่ทัน", energy: 50, valence: -65, arousal: 70, emoji: "😰" },
+
+  { category: "ความกังวล", name: "กังวล", desc: "คิดวนถึงความเสี่ยง/ผลลัพธ์", energy: 45, valence: -35, arousal: 55, emoji: "😟" },
+  { category: "ความกังวล", name: "เครียด", desc: "รู้สึกกดดันและตึงตัว", energy: 55, valence: -45, arousal: 70, emoji: "😣" },
+  { category: "ความกังวล", name: "กระวนกระวาย", desc: "อยู่ไม่สุข อยากขยับ/ทำอะไรสักอย่าง", energy: 60, valence: -35, arousal: 80, emoji: "😬" },
+  { category: "ความกังวล", name: "ลังเล", desc: "ตัดสินใจไม่ลง กลัวเลือกผิด", energy: 35, valence: -20, arousal: 40, emoji: "🤔" },
+  { category: "ความกังวล", name: "นอยด์", desc: "คิดมากจนจินตนาการไปไกล", energy: 50, valence: -40, arousal: 70, emoji: "🌪️" },
+
+  { category: "ความสงบ", name: "สงบ", desc: "ผ่อนคลายและใจนิ่ง", energy: 30, valence: 30, arousal: 15, emoji: "😌" },
+  { category: "ความสงบ", name: "สบายใจ", desc: "ปลอดภัยและผ่อนคลาย", energy: 35, valence: 40, arousal: 20, emoji: "🌿" },
+  { category: "ความสงบ", name: "มั่นคง", desc: "รู้สึกยืนอยู่บนพื้นได้ ไม่ไหวไปตามอารมณ์", energy: 40, valence: 35, arousal: 25, emoji: "🪨" },
+  { category: "ความสงบ", name: "ปล่อยวาง", desc: "ยอมรับและคลายการยึดติด", energy: 25, valence: 45, arousal: 10, emoji: "🍃" },
+  { category: "ความสงบ", name: "ชิล", desc: "สบาย ๆ ไม่รีบร้อน", energy: 40, valence: 50, arousal: 20, emoji: "🏖️" },
+
+  { category: "ความตื่นเต้น", name: "ตื่นเต้น", desc: "คึกคักและอยากเริ่ม", energy: 80, valence: 65, arousal: 85, emoji: "🤩" },
+  { category: "ความตื่นเต้น", name: "คึกคะนอง", desc: "พลังล้นและซุกซน", energy: 85, valence: 55, arousal: 90, emoji: "😜" },
+  { category: "ความตื่นเต้น", name: "ลุ้น", desc: "ตื่นตัวรอผลลัพธ์", energy: 70, valence: 25, arousal: 85, emoji: "🎯" },
+  { category: "ความตื่นเต้น", name: "ท้าทาย", desc: "อยากลองของยากและพิสูจน์ตัวเอง", energy: 75, valence: 45, arousal: 70, emoji: "⚡" },
+  { category: "ความตื่นเต้น", name: "ไฟแรง", desc: "อยากลุยเต็มที่ไม่มีเบรก", energy: 90, valence: 60, arousal: 85, emoji: "🏃" },
+
+  { category: "ความประหลาดใจ", name: "แปลกใจ", desc: "เจอสิ่งที่ไม่คาดคิดจนต้องหยุดมอง", energy: 55, valence: 15, arousal: 70, emoji: "😲" },
+  { category: "ความประหลาดใจ", name: "สะดุ้ง", desc: "ตกใจวูบกับสิ่งที่เกิดขึ้นกะทันหัน", energy: 70, valence: -25, arousal: 88, emoji: "😯" },
+  { category: "ความประหลาดใจ", name: "อึ้ง", desc: "พูดไม่ออกไปชั่วขณะ", energy: 40, valence: 0, arousal: 65, emoji: "😶" },
+  { category: "ความประหลาดใจ", name: "ว้าว", desc: "ตื่นตาตื่นใจแบบดี ๆ", energy: 72, valence: 65, arousal: 78, emoji: "😮" },
+  { category: "ความประหลาดใจ", name: "เซอร์ไพรส์", desc: "ได้รับสิ่งดี ๆ ที่ไม่ทันตั้งตัว", energy: 70, valence: 70, arousal: 75, emoji: "🎁" },
+
+  { category: "ความอยากรู้", name: "อยากรู้อยากเห็น", desc: "อยากสำรวจและค้นหาคำตอบ", energy: 60, valence: 35, arousal: 60, emoji: "🧐" },
+  { category: "ความอยากรู้", name: "สนใจ", desc: "ใจจดจ่อกับบางสิ่งอย่างตั้งใจ", energy: 55, valence: 35, arousal: 50, emoji: "🔍" },
+  { category: "ความอยากรู้", name: "ได้แรงบันดาลใจ", desc: "ไอเดียพรั่งพรูจนอยากลงมือ", energy: 70, valence: 60, arousal: 65, emoji: "💡" },
+  { category: "ความอยากรู้", name: "ลื่นไหล", desc: "จมดิ่งกับสิ่งที่ทำจนลืมเวลา", energy: 65, valence: 55, arousal: 55, emoji: "🌊" },
+
+  { category: "ความอาย", name: "อาย", desc: "อยากหลบสายตา รู้สึกเขิน", energy: 35, valence: -10, arousal: 55, emoji: "😳" },
+  { category: "ความอาย", name: "เขิน", desc: "อายแบบน่ารัก ๆ เมื่อถูกสนใจ", energy: 30, valence: 10, arousal: 50, emoji: "🫣" },
+  { category: "ความอาย", name: "ประหม่า", desc: "ตื่น ๆ เกร็ง ๆ ในสถานการณ์ใหม่", energy: 45, valence: -15, arousal: 70, emoji: "😅" },
+  { category: "ความอาย", name: "อับอาย", desc: "อายหนักจากการถูกตำหนิ/เสียหน้า", energy: 50, valence: -55, arousal: 75, emoji: "🫠" },
+  { category: "ความอาย", name: "เหวอ", desc: "ปล่อยไก่จนหน้าชา", energy: 50, valence: -25, arousal: 70, emoji: "🙈" },
+
+  { category: "ความผิดหวัง", name: "ผิดหวัง", desc: "ผลลัพธ์ไม่เป็นอย่างที่หวัง", energy: 35, valence: -55, arousal: 35, emoji: "😞" },
+  { category: "ความผิดหวัง", name: "ท้อ", desc: "อยากหยุดเพราะเหนื่อยใจ", energy: 20, valence: -45, arousal: 25, emoji: "🥲" },
+  { category: "ความผิดหวัง", name: "หมดหวังชั่วคราว", desc: "รู้สึกว่าทางเลือกน้อยลงมาก", energy: 15, valence: -70, arousal: 20, emoji: "🌧️" },
+  { category: "ความผิดหวัง", name: "เจ็บใจ", desc: "ผิดหวังปนโกรธและเสียดาย", energy: 55, valence: -55, arousal: 60, emoji: "💢" },
+  { category: "ความผิดหวัง", name: "แห้ว", desc: "พลาดสิ่งที่ตั้งตารอ", energy: 30, valence: -45, arousal: 35, emoji: "🍂" },
+
+  { category: "ความคิดถึง", name: "คิดถึง", desc: "อยากพบ/กลับไปเชื่อมต่อกับสิ่งสำคัญ", energy: 35, valence: 10, arousal: 35, emoji: "🥺" },
+  { category: "ความคิดถึง", name: "โหยหา", desc: "คิดถึงแบบแรงจนรู้สึกว่าง", energy: 45, valence: -15, arousal: 55, emoji: "🕯️" },
+  { category: "ความคิดถึง", name: "นึกถึงวันเก่า", desc: "ใจย้อนกลับไปที่ความทรงจำ", energy: 30, valence: 15, arousal: 25, emoji: "📼" },
+  { category: "ความคิดถึง", name: "อบอุ่นปนเหงา", desc: "คิดถึงแบบทั้งดีและเจ็บนิด ๆ", energy: 30, valence: -5, arousal: 30, emoji: "🫧" },
+  { category: "ความคิดถึง", name: "คิดถึงบ้าน", desc: "อยากกลับไปที่ที่คุ้นเคย", energy: 30, valence: 0, arousal: 30, emoji: "🏠" },
+
+  { category: "ความสับสน", name: "สับสน", desc: "ข้อมูลเยอะจนจับทิศทางยาก", energy: 40, valence: -20, arousal: 55, emoji: "😵‍💫" },
+  { category: "ความสับสน", name: "งง", desc: "ไม่เข้าใจสิ่งที่เกิดขึ้น", energy: 35, valence: -10, arousal: 45, emoji: "❓" },
+  { category: "ความสับสน", name: "ลังเลใจ", desc: "ใจแบ่งเป็นสองฝั่ง", energy: 35, valence: -5, arousal: 40, emoji: "🧭" },
+  { category: "ความสับสน", name: "คิดไม่ตก", desc: "ติดอยู่กับคำถามเดิม ๆ", energy: 45, valence: -25, arousal: 65, emoji: "🌀" },
+  { category: "ความสับสน", name: "มึน", desc: "หัวตื้อ คิดอะไรไม่ออก", energy: 30, valence: -20, arousal: 40, emoji: "🥴" },
+
+  { category: "ความภาคภูมิใจ", name: "ภูมิใจ", desc: "เห็นคุณค่าในความพยายาม/ผลลัพธ์", energy: 55, valence: 65, arousal: 40, emoji: "🏆" },
+  { category: "ความภาคภูมิใจ", name: "มั่นใจ", desc: "เชื่อว่าทำได้และพร้อมลงมือ", energy: 65, valence: 55, arousal: 55, emoji: "💪" },
+  { category: "ความภาคภูมิใจ", name: "ยินดีกับตัวเอง", desc: "ชื่นชมตัวเองอย่างจริงใจ", energy: 45, valence: 60, arousal: 30, emoji: "🌟" },
+  { category: "ความภาคภูมิใจ", name: "สง่างาม", desc: "นิ่งแต่ทรงพลัง รู้จักคุณค่าตัวเอง", energy: 45, valence: 50, arousal: 25, emoji: "🦚" },
+  { category: "ความภาคภูมิใจ", name: "ปัง", desc: "ทำได้ดีเกินคาด", energy: 75, valence: 75, arousal: 65, emoji: "🎉" },
+
+  { category: "ความอิจฉา", name: "อิจฉา", desc: "อยากได้สิ่งที่คนอื่นมี", energy: 50, valence: -25, arousal: 55, emoji: "😒" },
+  { category: "ความอิจฉา", name: "น้อยใจ", desc: "รู้สึกว่าตัวเองไม่ได้รับการใส่ใจ", energy: 35, valence: -35, arousal: 40, emoji: "🥺" },
+  { category: "ความอิจฉา", name: "เปรียบเทียบ", desc: "ใจเผลอวัดค่าตัวเองกับคนอื่น", energy: 45, valence: -20, arousal: 50, emoji: "📏" },
+  { category: "ความอิจฉา", name: "หมั่นไส้", desc: "ไม่ชอบใจแบบกึ่งขำกึ่งหงุดหงิด", energy: 55, valence: -25, arousal: 55, emoji: "😏" },
+  { category: "ความอิจฉา", name: "หึง", desc: "หวงและกลัวเสียคนสำคัญไป", energy: 60, valence: -40, arousal: 70, emoji: "😤" },
+
+  { category: "ความรังเกียจ", name: "รังเกียจ", desc: "ไม่อยากเข้าใกล้หรือยุ่งเกี่ยว", energy: 45, valence: -60, arousal: 55, emoji: "🤢" },
+  { category: "ความรังเกียจ", name: "ขยะแขยง", desc: "รู้สึกยี้จนขนลุก", energy: 50, valence: -65, arousal: 65, emoji: "🤮" },
+  { category: "ความรังเกียจ", name: "เอือมระอา", desc: "เบื่อหน่ายจนไม่อยากรับรู้", energy: 30, valence: -45, arousal: 35, emoji: "😑" },
+  { category: "ความรังเกียจ", name: "ไม่ถูกชะตา", desc: "ไม่ชอบใจโดยอธิบายไม่ได้", energy: 40, valence: -35, arousal: 45, emoji: "😒" },
+
+  { category: "ความขอบคุณ", name: "ขอบคุณ", desc: "เห็นคุณค่าและรู้สึกซาบซึ้ง", energy: 35, valence: 60, arousal: 20, emoji: "🙏" },
+  { category: "ความขอบคุณ", name: "ซาบซึ้ง", desc: "อิ่มเอมและอบอุ่นลึก ๆ", energy: 30, valence: 70, arousal: 15, emoji: "🥹" },
+  { category: "ความขอบคุณ", name: "ปลาบปลื้ม", desc: "ซึ้งใจจนมีน้ำตา", energy: 35, valence: 75, arousal: 25, emoji: "💛" },
+  { category: "ความขอบคุณ", name: "ยกย่อง", desc: "ชื่นชมผู้อื่น/โลกอย่างจริงใจ", energy: 40, valence: 55, arousal: 25, emoji: "🙌" },
+  { category: "ความขอบคุณ", name: "อิ่มใจ", desc: "ได้รับมากกว่าที่คาดคิด", energy: 40, valence: 70, arousal: 25, emoji: "🌻" },
+
+  { category: "ความเห็นใจ", name: "เห็นใจ", desc: "เข้าใจความรู้สึกของอีกฝ่าย", energy: 35, valence: 20, arousal: 35, emoji: "🤗" },
+  { category: "ความเห็นใจ", name: "สงสาร", desc: "อยากช่วยเมื่อเห็นใครลำบาก", energy: 35, valence: -15, arousal: 40, emoji: "🫂" },
+  { category: "ความเห็นใจ", name: "ใจดี", desc: "อยากทำสิ่งดี ๆ ให้คนอื่น", energy: 50, valence: 55, arousal: 40, emoji: "💝" },
+  { category: "ความเห็นใจ", name: "เข้าอกเข้าใจ", desc: "รับฟังโดยไม่ตัดสิน", energy: 35, valence: 35, arousal: 25, emoji: "👂" },
+  { category: "ความเห็นใจ", name: "ห่วงใย", desc: "เป็นห่วงความเป็นอยู่ของใครบางคน", energy: 40, valence: 15, arousal: 45, emoji: "🤲" },
+
+  { category: "ความโดดเดี่ยว", name: "โดดเดี่ยว", desc: "เหมือนอยู่คนเดียวแม้มีคนรอบตัว", energy: 20, valence: -55, arousal: 25, emoji: "🌙" },
+  { category: "ความโดดเดี่ยว", name: "ตัดขาด", desc: "รู้สึกแยกจากผู้คน/โลก", energy: 15, valence: -60, arousal: 20, emoji: "🕳️" },
+  { category: "ความโดดเดี่ยว", name: "ห่างเหิน", desc: "ระยะห่างทางใจเพิ่มขึ้น", energy: 20, valence: -40, arousal: 20, emoji: "🧊" },
+  { category: "ความโดดเดี่ยว", name: "ว่างเปล่า", desc: "เหมือนขาดความหมายหรือความรู้สึก", energy: 10, valence: -50, arousal: 10, emoji: "🫥" },
+  { category: "ความโดดเดี่ยว", name: "ไม่มีใครเข้าใจ", desc: "รู้สึกว่าไม่มีใครเข้าใจตัวเอง", energy: 20, valence: -55, arousal: 30, emoji: "🏝️" },
+
+  { category: "ความหวัง", name: "หวัง", desc: "เชื่อว่าสิ่งดี ๆ ยังเป็นไปได้", energy: 45, valence: 45, arousal: 35, emoji: "✨" },
+  { category: "ความหวัง", name: "มีกำลังใจ", desc: "พร้อมจะลองอีกครั้ง", energy: 55, valence: 50, arousal: 45, emoji: "🌈" },
+  { category: "ความหวัง", name: "มองโลกในแง่ดี", desc: "ตีความสิ่งต่าง ๆ ไปทางสร้างสรรค์", energy: 50, valence: 55, arousal: 35, emoji: "☀️" },
+  { category: "ความหวัง", name: "ฮึบ", desc: "ใจฮึดขึ้นมาสู้ต่อ", energy: 65, valence: 40, arousal: 60, emoji: "🚀" },
+  { category: "ความหวัง", name: "รอคอย", desc: "เฝ้ารอสิ่งดี ๆ ที่กำลังมา", energy: 45, valence: 35, arousal: 45, emoji: "🌱" },
+
+  { category: "ความทึ่ง", name: "ทึ่ง", desc: "ตื่นตะลึงกับความยิ่งใหญ่ของบางสิ่ง", energy: 55, valence: 55, arousal: 65, emoji: "🌌" },
+  { category: "ความทึ่ง", name: "อัศจรรย์ใจ", desc: "รู้สึกว่าโลกนี้มหัศจรรย์", energy: 55, valence: 65, arousal: 60, emoji: "🌠" },
+  { category: "ความทึ่ง", name: "ขนลุกซู่", desc: "ประทับใจจนขนลุก", energy: 60, valence: 55, arousal: 70, emoji: "🎶" },
+  { category: "ความทึ่ง", name: "ประทับใจ", desc: "เห็นแล้วจำฝังใจ", energy: 50, valence: 65, arousal: 50, emoji: "🌅" },
+
+  { category: "ความเบื่อ", name: "เบื่อ", desc: "ขาดความสนใจและแรงจูงใจ", energy: 20, valence: -10, arousal: 15, emoji: "🥱" },
+  { category: "ความเบื่อ", name: "จำเจ", desc: "ทุกอย่างเหมือนเดิมจนใจล้า", energy: 18, valence: -15, arousal: 12, emoji: "🧱" },
+  { category: "ความเบื่อ", name: "หมดไฟ", desc: "พลังใจร่อยหรอ ไม่อยากเริ่ม", energy: 10, valence: -25, arousal: 10, emoji: "🕯️" },
+  { category: "ความเบื่อ", name: "เฉยชา", desc: "รู้สึกช้า ๆ ไม่มีอารมณ์ร่วม", energy: 12, valence: -10, arousal: 8, emoji: "😶" },
+  { category: "ความเบื่อ", name: "ขี้เกียจ", desc: "ไม่อยากขยับไปไหน", energy: 10, valence: 0, arousal: 8, emoji: "🦥" },
+
+  { category: "ความเหนื่อยล้า", name: "เหนื่อย", desc: "ร่างกายและใจต้องการพัก", energy: 15, valence: -20, arousal: 20, emoji: "😪" },
+  { category: "ความเหนื่อยล้า", name: "ง่วง", desc: "ตาปรือ อยากนอน", energy: 10, valence: 0, arousal: 10, emoji: "😴" },
+  { category: "ความเหนื่อยล้า", name: "ล้า", desc: "ใช้แรงไปเยอะจนแบตใกล้หมด", energy: 12, valence: -25, arousal: 18, emoji: "🪫" },
+  { category: "ความเหนื่อยล้า", name: "หมดแรง", desc: "ไม่เหลือพลังจะทำอะไรต่อ", energy: 5, valence: -35, arousal: 15, emoji: "😩" },
+  { category: "ความเหนื่อยล้า", name: "แบตสังคมหมด", desc: "เจอคนมาเยอะจนอยากอยู่เงียบ ๆ", energy: 15, valence: -15, arousal: 20, emoji: "🔋" },
+
+  { category: "ความโล่งใจ", name: "โล่งใจ", desc: "ความกดดันลดลงทันที", energy: 30, valence: 55, arousal: 20, emoji: "😮‍💨" },
+  { category: "ความโล่งใจ", name: "สบายใจขึ้น", desc: "เหมือนยกของหนักลงจากอก", energy: 35, valence: 45, arousal: 25, emoji: "🫧" },
+  { category: "ความโล่งใจ", name: "ผ่านพ้น", desc: "รู้สึกว่ารอดแล้ว", energy: 40, valence: 40, arousal: 35, emoji: "✅" },
+  { category: "ความโล่งใจ", name: "ปลอดภัย", desc: "รู้สึกไม่ถูกคุกคามและวางใจได้", energy: 35, valence: 50, arousal: 15, emoji: "🛟" },
+  { category: "ความโล่งใจ", name: "ปลดล็อก", desc: "ปัญหาที่ค้างคาคลี่คลายแล้ว", energy: 50, valence: 55, arousal: 35, emoji: "🔓" },
+
+  // Mixed/complex seeds (more nuanced)
+  { category: "อารมณ์ผสมและซับซ้อน", name: "ขมหวาน", desc: "สุขกับบางอย่างแต่เจ็บลึก ๆ ในเวลาเดียวกัน", energy: 45, valence: 10, arousal: 40, emoji: "🍯" },
+  { category: "อารมณ์ผสมและซับซ้อน", name: "ตื้นตันปนหนักใจ", desc: "ซึ้งใจแต่มีความกังวลซ่อนอยู่", energy: 40, valence: 15, arousal: 45, emoji: "🎐" },
+  { category: "อารมณ์ผสมและซับซ้อน", name: "โล่งใจปนหวั่น", desc: "ดีขึ้นแล้วแต่ยังไม่ไว้ใจเต็มที่", energy: 45, valence: 15, arousal: 55, emoji: "🫧" },
+  { category: "อารมณ์ผสมและซับซ้อน", name: "สงบแต่โดดเดี่ยว", desc: "นิ่งขึ้นแต่ยังรู้สึกห่างจากผู้คน", energy: 25, valence: -10, arousal: 15, emoji: "🌙" },
+  { category: "อารมณ์ผสมและซับซ้อน", name: "ตื่นเต้นปนกลัว", desc: "อยากลองแต่ก็หวั่นใจ", energy: 65, valence: 5, arousal: 80, emoji: "🎢" },
+  { category: "อารมณ์ผสมและซับซ้อน", name: "ดีใจปนใจหาย", desc: "ยินดีกับการเปลี่ยนแปลงแต่ก็คิดถึงสิ่งเดิม", energy: 40, valence: 15, arousal: 40, emoji: "🌦️" },
+];
+
+const INTENSITY_MODS = [
+  { name: "เล็กน้อย", d: "เบา ๆ ยังพอไหว", e: -15, v: 0, a: -10, w: 0.9 },
+  { name: "พอดี ๆ", d: "ระดับกำลังดี รับรู้ชัดเจน", e: 0, v: 0, a: 0, w: 1.0 },
+  { name: "ชัดเจน", d: "เด่นชัดจนสังเกตตัวเองได้", e: 10, v: 0, a: 10, w: 0.95 },
+  { name: "เข้มข้น", d: "แรงจนมีผลต่อการตัดสินใจ", e: 20, v: 0, a: 20, w: 0.85 },
+];
+
+const TEXTURE_MODS = [
+  { name: "เงียบ ๆ", extra: "ออกมาแบบเงียบ ๆ ในใจ", e: -5, a: -10, w: 1.0 },
+  { name: "วูบวาบ", extra: "มาเป็นระลอก วูบวาบ", e: 8, a: 15, w: 0.95 },
+  { name: "ยืดเยื้อ", extra: "ค้างอยู่นานกว่าปกติ", e: -8, a: -5, w: 0.9 },
+  { name: "ปนความคิด", extra: "มีความคิดวนร่วมด้วย", e: 0, a: 10, w: 0.9 },
+  { name: "ปนกายภาพ", extra: "รู้สึกได้ทางร่างกายด้วย", e: 6, a: 12, w: 0.9 },
+];
+
+const SPECIALTY_MOODS = [
+  // Weird / niche / specific emotions (Thai-friendly names)
+  { name: "ฟุ้งซ่าน", category: "ความกังวล", description: "ใจลอย คิดกระโดดไปมา", energy: 45, valence: -15, arousal: 65, color: "#fbbf24", emoji: "🫧", weight: 0.95 },
+  { name: "ใจแป้ว", category: "ความผิดหวัง", description: "ความหวังหล่นหายทันที", energy: 25, valence: -50, arousal: 30, color: "#94a3b8", emoji: "🫤", weight: 0.9 },
+  { name: "อิ่มเอม", category: "ความสุข", description: "อุ่น ๆ แน่น ๆ แบบสุขใจ", energy: 40, valence: 70, arousal: 20, color: "#34d399", emoji: "🥰", weight: 0.95 },
+  { name: "สับสนเชิงบวก", category: "อารมณ์ผสมและซับซ้อน", description: "งงแต่ตื่นเต้นเหมือนได้เรียนรู้อะไรใหม่", energy: 60, valence: 25, arousal: 70, color: "#7c3aed", emoji: "🧠", weight: 0.85 },
+  { name: "เคร่งขรึม", category: "ความสงบ", description: "นิ่ง สุขุม จริงจัง", energy: 35, valence: 10, arousal: 20, color: "#22d3ee", emoji: "🧘", weight: 0.9 },
+  { name: "ระทึก", category: "ความตื่นเต้น", description: "ลุ้นแบบหัวใจเต้นแรง", energy: 75, valence: 15, arousal: 90, color: "#f472b6", emoji: "🫀", weight: 0.9 },
+  { name: "สะเทือนใจ", category: "ความเศร้า", description: "เศร้าปนซึ้งจนใจสั่น", energy: 35, valence: -45, arousal: 45, color: "#60a5fa", emoji: "🫧", weight: 0.85 },
+  { name: "ใจฟู", category: "ความรัก", description: "อุ่นใจจนเหมือนพองฟู", energy: 45, valence: 70, arousal: 30, color: "#fb7185", emoji: "🫶", weight: 1.0 },
+  { name: "หวั่นไหว", category: "ความรัก", description: "ใจสั่นกับความหมายบางอย่าง", energy: 55, valence: 35, arousal: 65, color: "#fb7185", emoji: "💓", weight: 0.9 },
+  { name: "ประหลาดใจ", category: "ความตื่นเต้น", description: "เจอสิ่งที่ไม่คาดคิด", energy: 60, valence: 25, arousal: 75, color: "#f472b6", emoji: "😮", weight: 0.95 },
+  { name: "หวิว ๆ", category: "อารมณ์ผสมและซับซ้อน", description: "ว่าง ๆ เบา ๆ แต่ก็หน่วง", energy: 25, valence: -10, arousal: 30, color: "#7c3aed", emoji: "🌫️", weight: 0.9 },
+  { name: "น้อยอกน้อยใจ", category: "ความอิจฉา", description: "รู้สึกไม่ถูกเห็นคุณค่า", energy: 35, valence: -40, arousal: 35, color: "#10b981", emoji: "🥺", weight: 0.9 },
+  { name: "เข็ดหลาบ", category: "ความกลัว", description: "กลัวซ้ำเพราะเคยเจ็บมาแล้ว", energy: 45, valence: -45, arousal: 55, color: "#a78bfa", emoji: "🧊", weight: 0.85 },
+  { name: "ระอา", category: "ความเบื่อ", description: "เบื่อจนเริ่มรำคาญ", energy: 30, valence: -25, arousal: 35, color: "#a1a1aa", emoji: "🙄", weight: 0.9 },
+  { name: "ใจหาย", category: "ความกลัว", description: "ตกใจวูบเหมือนหัวใจหล่น", energy: 65, valence: -40, arousal: 85, color: "#a78bfa", emoji: "🫨", weight: 0.9 },
+  { name: "รู้สึกผิด", category: "ความผิดหวัง", description: "โทษตัวเองกับสิ่งที่ทำ/ไม่ได้ทำ", energy: 30, valence: -55, arousal: 40, color: "#94a3b8", emoji: "😔", weight: 0.9 },
+  { name: "ละอายใจ", category: "ความอาย", description: "อายเพราะรู้ว่าทำไม่เหมาะสม", energy: 35, valence: -50, arousal: 55, color: "#fda4af", emoji: "🫣", weight: 0.85 },
+  { name: "หงุดหงิด", category: "ความโกรธ", description: "ระคายเคืองเพราะอะไรไม่เป็นใจ", energy: 50, valence: -35, arousal: 60, color: "#f97316", emoji: "😤", weight: 1.0 },
+  { name: "ตัดพ้อ", category: "ความเศร้า", description: "น้อยใจปนเศร้า อยากให้เข้าใจ", energy: 30, valence: -45, arousal: 35, color: "#60a5fa", emoji: "🥺", weight: 0.85 },
+  { name: "สำนึก", category: "ความขอบคุณ", description: "รับรู้คุณค่าบางอย่างอย่างลึกซึ้ง", energy: 30, valence: 50, arousal: 20, color: "#f59e0b", emoji: "🕯️", weight: 0.85 },
+  { name: "ตื้นตัน", category: "ความขอบคุณ", description: "รู้สึกซึ้งจนเกือบน้ำตาไหล", energy: 35, valence: 70, arousal: 25, color: "#f59e0b", emoji: "🥹", weight: 0.95 },
+  { name: "โอเคแบบหมดแรง", category: "ความโล่งใจ", description: "โล่งใจแต่ยังเหนื่อย", energy: 20, valence: 35, arousal: 20, color: "#2dd4bf", emoji: "😮‍💨", weight: 0.85 },
+  { name: "สงสัย", category: "ความสับสน", description: "อยากรู้คำตอบและค้นหาเหตุผล", energy: 45, valence: 10, arousal: 50, color: "#c084fc", emoji: "🧐", weight: 0.95 },
+];
+
+// Handcrafted extras: [name, category, description, energy, valence, arousal, emoji, weight]
+const EXTRA_MOODS = [
+  ["ขำกลบเกลื่อน", "อารมณ์ผสมและซับซ้อน", "หัวเราะเพื่อปกป้องตัวเองจากความอึดอัด", 45, 5, 55, "🙂", 0.8],
+  ["ยิ้มเจื่อน", "อารมณ์ผสมและซับซ้อน", "ยิ้มทั้งที่ใจไม่ไปด้วย", 25, -10, 30, "😬", 0.85],
+  ["คาดหวัง", "ความหวัง", "คาดหวังผลลัพธ์แบบมีภาพในใจ", 45, 25, 45, "🔭", 0.9],
+  ["ปลอดโปร่ง", "ความสงบ", "หัวโล่ง ใจโปร่ง", 35, 40, 15, "🌤️", 0.95],
+  ["เหนื่อยใจ", "ความเศร้า", "เหนื่อยแบบอธิบายไม่หมด", 15, -35, 20, "😮‍💨", 0.95],
+  ["ใจร้อน", "ความโกรธ", "หงุดหงิดจนอยากให้จบเร็ว ๆ", 65, -35, 75, "🥵", 0.9],
+  ["หวั่น ๆ", "ความกังวล", "กังวลเบา ๆ เหมือนมีอะไรค้าง", 35, -15, 45, "🫧", 1.0],
+  ["กล้าหาญเงียบ ๆ", "ความหวัง", "กล้าที่จะทำ แม้ไม่ดัง", 55, 35, 40, "🛡️", 0.85],
+  ["อุ่นใจ", "ความรัก", "รู้สึกได้รับการดูแลและยอมรับ", 40, 65, 25, "🫶", 1.0],
+  ["ตื่นรู้", "ความสงบ", "รู้สึกชัดเจนและอยู่กับปัจจุบัน", 45, 45, 35, "🧘", 0.85],
+  ["หมั่นใจในวันนี้", "ความภาคภูมิใจ", "มั่นใจแบบพอดี ๆ กับสิ่งที่ทำได้", 55, 50, 45, "✅", 0.9],
+  ["เสียดาย", "ความเศร้า", "อยากให้เรื่องนั้นเป็นอีกแบบ", 30, -35, 35, "🫧", 0.95],
+  ["เกรงใจ", "ความอาย", "ไม่อยากรบกวน/ทำให้ลำบาก", 30, -5, 40, "🙇", 0.95],
+  ["เขินปนดีใจ", "อารมณ์ผสมและซับซ้อน", "เขินแต่ก็สุขใจ", 45, 35, 55, "😳", 0.9],
+  ["กังวลปนหวัง", "อารมณ์ผสมและซับซ้อน", "ใจสู้ แต่ยังห่วง", 50, 5, 65, "🫨", 0.9],
+  ["โกรธแต่รักอยู่", "อารมณ์ผสมและซับซ้อน", "ไม่พอใจแต่ยังห่วงใย", 60, -5, 65, "💗", 0.85],
+  ["เศร้าแบบสงบ", "อารมณ์ผสมและซับซ้อน", "เศร้าแต่ไม่แตกสลาย", 20, -35, 15, "🌧️", 0.9],
+
+  // New: modern everyday Thai feelings
+  ["มูฟออน", "ความหวัง", "พร้อมก้าวต่อจากเรื่องเก่า", 55, 40, 40, "🚶", 0.95],
+  ["อินเนอร์มา", "ความตื่นเต้น", "อินจัดจนพลังพุ่งปรี๊ด", 85, 60, 85, "🎭", 0.95],
+  ["เฟล", "ความผิดหวัง", "พลาดแบบฮา ๆ ปนเซ็ง", 35, -30, 40, "🤦", 0.95],
+  ["เซ็ง", "ความเบื่อ", "หงุดหงิดปนเบื่อ อะไรก็ไม่ได้ดั่งใจ", 25, -30, 30, "😩", 1.0],
+  ["งอน", "ความอิจฉา", "น้อยใจเล็ก ๆ อยากให้มีคนมาง้อ", 40, -20, 45, "😾", 0.95],
+  ["ปลง", "ความสงบ", "ยอมรับความเป็นจริงแบบขำ ๆ", 25, 10, 15, "🗿", 0.95],
+  ["ตื่นตูม", "ความกลัว", "ตกใจเกินเหตุไปก่อน", 70, -30, 85, "🙀", 0.9],
+  ["มโน", "อารมณ์ผสมและซับซ้อน", "จินตนาการไปไกลเกินจริง", 55, 20, 60, "💭", 0.9],
+  ["จุก", "ความเศร้า", "เจ็บจนพูดไม่ออก", 30, -60, 50, "😖", 0.9],
+  ["ฟีลกู้ด", "ความสุข", "ทุกอย่างลงตัวไปหมด", 65, 75, 45, "😎", 1.0],
+  ["ขนลุก", "ความกลัว", "เสียวสันหลังวาบ", 55, -35, 75, "👻", 0.9],
+  ["หิวจนหงุดหงิด", "ความโกรธ", "หิวจนอารมณ์เสีย ใครพูดอะไรก็ไม่เข้าหู", 55, -40, 65, "🍔", 0.9],
+  ["กลัวตกกระแส", "ความกังวล", "กลัวพลาดสิ่งที่คนอื่นได้ทำ", 55, -30, 65, "📱", 0.9],
+  ["อยากร้องไห้แต่ไม่ออก", "ความเศร้า", "อัดอั้นแต่น้ำตาไม่ไหล", 25, -55, 40, "😶‍🌫️", 0.85],
+  ["ซึมกะทือ", "ความเศร้า", "เหงาหงอยไร้ชีวิตชีวา", 12, -45, 12, "☁️", 0.9],
+  ["หลงทาง", "ความสับสน", "ไม่รู้ว่าจะไปทางไหนต่อ", 30, -30, 40, "🗺️", 0.9],
+  ["ยูเรก้า", "ความอยากรู้", "เข้าใจบางอย่างขึ้นมาทันที", 75, 70, 75, "🧪", 0.95],
+  ["ใจละลาย", "ความรัก", "น่ารักจนใจละลาย", 45, 80, 45, "🥹", 0.95],
+  ["ตาลุกวาว", "ความตื่นเต้น", "เห็นของที่อยากได้แล้วตาเป็นประกาย", 75, 60, 80, "🤑", 0.9],
+  ["ง่วงแต่ไม่อยากนอน", "ความเหนื่อยล้า", "ร่างกายล้าแต่ใจยังอยากเล่นต่อ", 25, 10, 40, "🦉", 0.95],
+  ["สงสารตัวเอง", "ความเห็นใจ", "อยากโอบกอดตัวเองบ้าง", 25, -20, 30, "🫂", 0.9],
+  ["ทึ่งในธรรมชาติ", "ความทึ่ง", "รู้สึกตัวเล็กลงต่อหน้าความยิ่งใหญ่", 40, 55, 40, "🏔️", 0.95],
+  ["ยี้", "ความรังเกียจ", "ไม่ชอบจนต้องเบือนหน้าหนี", 45, -45, 55, "🙅", 0.9],
+  ["ตื่นตาตื่นใจ", "ความประหลาดใจ", "ทุกอย่างดูใหม่และน่าตื่นเต้น", 70, 60, 75, "👀", 0.95],
+  ["แอบปลื้ม", "ความภาคภูมิใจ", "ภูมิใจเงียบ ๆ ไม่ต้องบอกใคร", 45, 60, 30, "😌", 0.95],
+];

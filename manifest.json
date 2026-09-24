@@ -1,18 +1,24 @@
 {
   "name": "EMO — Mood Randomizer",
   "short_name": "EMO",
-  "description": "แอปพลิเคชันสุ่มและบันทึกอารมณ์แบบละเอียด ไม่ซ้ำง่าย ทำงานออฟไลน์ได้ 100%",
+  "description": "แอปพลิเคชันสุ่มและบันทึกอารมณ์แบบละเอียด ไม่ซ้ำง่าย พร้อมวงล้อ ผสมอารมณ์ ดวงรายวัน ฝึกหายใจ ทำงานออฟไลน์ได้ 100%",
+  "lang": "th",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0b1020",
-  "theme_color": "#7c3aed",
+  "background_color": "#0a0e1f",
+  "theme_color": "#0a0e1f",
+  "orientation": "portrait-primary",
+  "categories": ["lifestyle", "health", "entertainment"],
   "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ],
-  "orientation": "portrait-primary"
+  "shortcuts": [
+    { "name": "สุ่มอารมณ์", "short_name": "สุ่ม", "url": "./?action=roll" },
+    { "name": "ดวงอารมณ์วันนี้", "short_name": "ดวงวันนี้", "url": "./?action=daily" },
+    { "name": "ฝึกหายใจ", "short_name": "หายใจ", "url": "./?action=breathe" }
+  ]
 }
